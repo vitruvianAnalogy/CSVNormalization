@@ -1,7 +1,6 @@
 package entity;
 
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
