@@ -1,6 +1,7 @@
 package entity;
 
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,8 +56,12 @@ public class Row {
 		return address;
 	}
 	public void setAddress(String address) {
-		//TODO
-		this.address = address;
+		//Check if invalid UTF-8
+		if(isValidUnicode(address)){
+			this.address = address;
+		} else {
+			this.address = fixInvalidString(address);
+		}
 	}
 	
 	public String getFooDuration() {
@@ -84,8 +89,12 @@ public class Row {
 		return notes;
 	}
 	public void setNotes(String notes) {
-		//TODO
-		this.notes  = notes;
+		//Check if invalid UTF-8
+		if(isValidUnicode(notes)){
+			this.notes = notes;
+		} else {
+			this.notes = fixInvalidString(notes);
+		}
 	}
 	public void parseAndStoreLine(String line) throws ParseException {
 		
@@ -154,5 +163,15 @@ public class Row {
 		floatTime = floatTime.add(new BigDecimal(seconds));
 		floatTime = floatTime.add(new BigDecimal(milliseconds/100));
 		return floatTime.toString();
+	}
+	
+	public boolean isValidUnicode(String line){
+		//TODO
+		return true;
+	}
+	
+	public String fixInvalidString(String line){
+		//TODO
+		return line;
 	}
 }
