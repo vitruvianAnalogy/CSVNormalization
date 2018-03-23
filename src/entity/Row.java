@@ -1,7 +1,11 @@
 package entity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class Row {
 	private String timestamp;
@@ -19,8 +23,14 @@ public class Row {
 	public String getTimestamp() {
 		return timestamp;
 	}
-	public void setTimestamp(String timestamp) {
-		//TODO
+	public void setTimestamp(String timestamp) throws ParseException {
+		SimpleDateFormat pstFormat = new SimpleDateFormat("mm/dd/yyyy hh:mm:ss a");
+		pstFormat.setTimeZone(TimeZone.getTimeZone("PST"));
+		Date date = pstFormat.parse(timestamp);
+		
+		SimpleDateFormat estFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+		estFormat.setTimeZone(TimeZone.getTimeZone("EST"));
+		this.timestamp = estFormat.format(date);
 	}
 	
 	public String getZipCode() {
@@ -71,7 +81,7 @@ public class Row {
 	public void setNotes(String notes) {
 		//TODO
 	}
-	public void parseAndStoreLine(String line) {
+	public void parseAndStoreLine(String line) throws ParseException {
 		
 		if (line == null || line.isEmpty()){
 			System.err.println("Line is empty. Skipping to next line");

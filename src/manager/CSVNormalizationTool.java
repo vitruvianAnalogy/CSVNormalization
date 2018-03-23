@@ -2,15 +2,18 @@ package manager;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 
 import entity.CSVFile;
+import entity.Row;
 
 public class CSVNormalizationTool {
+
+	private static final String SEPARATOR = ",";
+	private static final String NEW_LINE_SEPARATOR = "\n";
 
 	public static void main(String[] args) {
 
@@ -43,7 +46,42 @@ public class CSVNormalizationTool {
 				}
 			}
 
-			// Export into CSV file
+			// Export CSV File
+			FileWriter fWriter = null;
+
+			try {
+				fWriter = new FileWriter(args[1]);
+				fWriter.append(csvFile.getHeaderLine());
+				fWriter.append(NEW_LINE_SEPARATOR);
+
+				for (Row row : csvFile.getRows()) {
+					fWriter.append(String.valueOf(row.getTimestamp()));
+					fWriter.append(SEPARATOR);
+					fWriter.append(String.valueOf(row.getAddress()));
+					fWriter.append(SEPARATOR);
+					fWriter.append(String.valueOf(row.getZipCode()));
+					fWriter.append(SEPARATOR);
+					fWriter.append(String.valueOf(row.getName()));
+					fWriter.append(SEPARATOR);
+					fWriter.append(String.valueOf(row.getFooDuration()));
+					fWriter.append(SEPARATOR);
+					fWriter.append(String.valueOf(row.getBarDuration()));
+					fWriter.append(SEPARATOR);
+					fWriter.append(String.valueOf(row.getTotalDuration()));
+					fWriter.append(SEPARATOR);
+					fWriter.append(String.valueOf(row.getNotes()));
+					fWriter.append(NEW_LINE_SEPARATOR);
+				}
+			} catch (Exception ex) {
+				System.err.println(ex.getMessage());
+			} finally {
+				try {
+					fWriter.flush();
+					fWriter.close();
+				} catch (IOException ex) {
+					System.err.println(ex.getMessage());
+				}
+			}
 		}
 	}
 }
