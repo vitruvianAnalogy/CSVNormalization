@@ -1,5 +1,6 @@
 package entity;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,27 +56,28 @@ public class Row {
 	}
 	public void setAddress(String address) {
 		//TODO
+		this.address = address;
 	}
 	
 	public String getFooDuration() {
 		return fooDuration;
 	}
 	public void setFooDuration(String fooDuration) {
-		//TODO
+		this.fooDuration = convertTimeToSeconds(fooDuration);
 	}
 	
 	public String getBarDuration() {
 		return barDuration;
 	}
 	public void setBarDuration(String barDuration) {
-		//TODO
+		this.barDuration = convertTimeToSeconds(barDuration);
 	}
 	
 	public String getTotalDuration() {
 		return totalDuration;
 	}
-	public void setTotalDuration(String totalDuration) {
-		//TODO
+	public void setTotalDuration(String fooDuration, String barDuration) {
+		this.totalDuration = new BigDecimal(getFooDuration()).add(new BigDecimal(getBarDuration())).toString();
 	}
 	
 	public String getNotes() {
@@ -83,6 +85,7 @@ public class Row {
 	}
 	public void setNotes(String notes) {
 		//TODO
+		this.notes  = notes;
 	}
 	public void parseAndStoreLine(String line) throws ParseException {
 		
@@ -98,7 +101,7 @@ public class Row {
 		setName(columnSet.get(3));
 		setFooDuration(columnSet.get(4));
 		setBarDuration(columnSet.get(5));
-		//setTotalDuration(columnSet.get(6));
+		setTotalDuration(columnSet.get(4), columnSet.get(5));
 		setNotes(columnSet.get(7));
 		
 	}
@@ -130,5 +133,26 @@ public class Row {
 		result.add(current.toString());
 		
 		return result;
+	}
+	
+	public String convertTimeToSeconds(String time){
+		int startIndex = 0;
+		int colonIndex = time.indexOf(":");
+		int hour = Integer.parseInt(time.substring(startIndex, colonIndex ));
+		
+		startIndex = colonIndex;
+		colonIndex = time.indexOf(":", colonIndex+1);
+		int minutes = Integer.parseInt(time.substring(startIndex+1, colonIndex));
+		
+		int dotIndex = time.indexOf(".");
+		int seconds = Integer.parseInt(time.substring(colonIndex+1, dotIndex));
+		
+		int milliseconds = Integer.parseInt(time.substring(dotIndex+1));
+		
+		BigDecimal floatTime = new BigDecimal(hour*60*60);
+		floatTime = floatTime.add(new BigDecimal(minutes*60));
+		floatTime = floatTime.add(new BigDecimal(seconds));
+		floatTime = floatTime.add(new BigDecimal(milliseconds/100));
+		return floatTime.toString();
 	}
 }
