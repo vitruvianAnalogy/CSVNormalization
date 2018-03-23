@@ -37,14 +37,17 @@ public class Row {
 		return zipCode;
 	}
 	public void setZipCode(String zipCode) {
-		//TODO
+		if (zipCode.length()<5){
+			zipCode = String.format("%5s", Integer.parseInt(zipCode)).replace(" ", "0"); 
+		}
+		this.zipCode = zipCode;
 	}
 	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
-		//TODO
+		this.name = name.toUpperCase();
 	}
 	
 	public String getAddress() {
