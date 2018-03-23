@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Row {
@@ -11,6 +12,9 @@ public class Row {
 	private String barDuration;
 	private String totalDuration;
 	private String notes;
+	
+	private static final char QUOTE = '"';
+	private static final char SEPARATOR = ',';
 	
 	public String getTimestamp() {
 		return timestamp;
@@ -86,7 +90,32 @@ public class Row {
 		
 	}
 	private List<String> parseLine(String line) {
-		// TODO - Write parsing logic for the csv line.
-		return null;
+		
+		List<String> result = new ArrayList<String>();
+		boolean insideQuotes = false;
+		StringBuffer current = new StringBuffer();
+
+		for(char ch : line.toCharArray()){
+			if(insideQuotes){
+				if(ch==QUOTE){
+					insideQuotes = false;
+					current.append(ch);
+				} else {
+					current.append(ch);
+				}
+			} else {
+				if(ch==QUOTE){
+					insideQuotes = true;					
+				} else if(ch==SEPARATOR){
+					result.add(current.toString());
+					current = new StringBuffer();
+				}else {
+					current.append(ch);
+				}
+			}
+		}
+		result.add(current.toString());
+		
+		return result;
 	}
 }
