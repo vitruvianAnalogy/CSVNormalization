@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.List;
+
 public class Row {
 	private String timestamp;
 	private String zipCode;
@@ -9,9 +11,6 @@ public class Row {
 	private String barDuration;
 	private String totalDuration;
 	private String notes;
-	
-	private static final char QUOTE = '"';
-	private static final char SEPARATOR = ',';
 	
 	public String getTimestamp() {
 		return timestamp;
@@ -67,5 +66,27 @@ public class Row {
 	}
 	public void setNotes(String notes) {
 		//TODO
+	}
+	public void parseAndStoreLine(String line) {
+		
+		if (line == null || line.isEmpty()){
+			System.err.println("Line is empty. Skipping to next line");
+			return;
+		}
+		
+		List<String> columnSet = parseLine(line);
+		setTimestamp(columnSet.get(0));
+		setAddress(columnSet.get(1));
+		setZipCode(columnSet.get(2));
+		setName(columnSet.get(3));
+		setFooDuration(columnSet.get(4));
+		setBarDuration(columnSet.get(5));
+		//setTotalDuration(columnSet.get(6));
+		setNotes(columnSet.get(7));
+		
+	}
+	private List<String> parseLine(String line) {
+		// TODO - Write parsing logic for the csv line.
+		return null;
 	}
 }
